@@ -12,6 +12,9 @@
 
 <!-- th:action = where the form is sent, th:object = the model object the inputs belong to -->
 <form th:action="@{/plan}" th:object="${planRequest}" method="post">
+  <div class="error" th:if="${#fields.hasGlobalErrors()}">
+    <p th:each="err : ${#fields.globalErrors()}" th:text="${err}"></p>
+  </div>
 
   <p><label>Age
     <input type="number" th:field="*{age}"></label>

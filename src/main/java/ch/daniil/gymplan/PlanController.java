@@ -40,7 +40,15 @@ public class PlanController {
             return "plan-form";
         }
         Plan plan = planService.createPlan(planRequest);
+        String rawPlan;
+        try {
+            rawPlan = planService.generateRawPlan(planRequest);
+        } catch (GeminiException e) {
+            bindingResult.reject("gemini.failed", e.getMessage());
+            return "plan-form";
+        }
         model.addAttribute("plan", plan);
+        model.addAttribute("rawPlan", rawPlan);
         return "plan-result";
     }
 

@@ -38,7 +38,10 @@
         </tr>
     </table>
 </div>
-
+<div th:if="${rawPlan != null}">
+    <h2>Raw Gemini answer (lesson 5 test)</h2>
+    <pre th:text="${rawPlan}"></pre>
+</div>
 <a th:href="@{/plan}">Back</a>
 </body>
 </html>

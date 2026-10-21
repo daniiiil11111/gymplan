@@ -3,8 +3,42 @@
 <head>
     <meta charset="UTF-8">
     <title>Your plan</title>
+    <style>
+        table { border-collapse: collapse; margin-bottom: 1.5em; }
+        th, td { border: 1px solid #999; padding: 6px 12px; text-align: left; }
+        th { background: #eee; }
+    </style>
 </head>
 <body>
-<p>Your age is <span th:text="${planRequest.age}"></span></p>
+<h1>Your plan</h1>
+
+<p th:text="${plan.summary}">summary</p>
+
+<h2>Your input</h2>
+<ul>
+    <li>Goal: <span th:text="${planRequest.goal}"></span></li>
+    <li>Days per week: <span th:text="${planRequest.daysPerWeek}"></span></li>
+    <li>Minutes per session: <span th:text="${planRequest.minutesPerSession}"></span></li>
+</ul>
+
+<div th:each="day : ${plan.days}">
+    <h2 th:text="|${day.label}: ${day.focus}|">Day</h2>
+    <table>
+        <tr>
+            <th>Exercise</th>
+            <th>Sets</th>
+            <th>Reps</th>
+            <th>Rest</th>
+        </tr>
+        <tr th:each="exercise : ${day.listOfExercises}">
+            <td th:text="${exercise.name}"></td>
+            <td th:text="${exercise.sets}"></td>
+            <td th:text="${exercise.reps}"></td>
+            <td th:text="|${exercise.restSeconds} s|"></td>
+        </tr>
+    </table>
+</div>
+
+<a th:href="@{/plan}">Back</a>
 </body>
 </html>

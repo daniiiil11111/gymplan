@@ -10,6 +10,6 @@ public class HomeController {
     @GetMapping("/")
     public String home(Model model) {
         model.addAttribute("message", "Hello World!");
-        return "index";
+        return "redirect:/plan";
     }
 }

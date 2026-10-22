@@ -5,7 +5,7 @@ import java.util.ArrayList;
 public class Day {
     private String label;
     private String focus;
-    private ArrayList<Exercise> listOfExercises = new ArrayList<>();
+    private ArrayList<Exercise> exercises = new ArrayList<>();
     public String getLabel() {
         return label;
     }
@@ -22,11 +22,11 @@ public class Day {
         this.focus = focus;
     }
 
-    public ArrayList<Exercise> getListOfExercises() {
-        return listOfExercises;
+    public ArrayList<Exercise> getExercises() {
+        return exercises;
     }
 
-    public void setListOfExercises(ArrayList<Exercise> listOfExercises) {
-        this.listOfExercises = listOfExercises;
+    public void setExercises(ArrayList<Exercise> exercises) {
+        this.exercises = exercises;
     }
 }

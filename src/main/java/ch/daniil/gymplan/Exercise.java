@@ -11,6 +11,9 @@ public class Exercise {
         this.reps = reps;
         this.restSeconds = restSeconds;
     }
+    public Exercise(){
+
+    }
 
     public String getName() {
         return name;

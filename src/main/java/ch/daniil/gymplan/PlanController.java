@@ -8,6 +8,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 @Controller
 public class PlanController {
@@ -39,18 +40,18 @@ public class PlanController {
         if (bindingResult.hasErrors()){
             return "plan-form";
         }
-        Plan plan = planService.createPlan(planRequest);
-        String rawPlan;
+        Plan plan;
         try {
-            rawPlan = planService.generateRawPlan(planRequest);
+            plan = planService.generatePlan(planRequest);
         } catch (GeminiException e) {
             bindingResult.reject("gemini.failed", e.getMessage());
             return "plan-form";
         }
         model.addAttribute("plan", plan);
-        model.addAttribute("rawPlan", rawPlan);
         return "plan-result";
     }
+
+
 
 
 }

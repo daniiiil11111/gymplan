@@ -1,6 +1,25 @@
 package ch.daniil.gymplan;
 
 public class Exercise {
+    private String muscle;
+
+    public Integer getRir() {
+        return rir;
+    }
+
+    public void setRir(Integer rir) {
+        this.rir = rir;
+    }
+
+    public String getMuscle() {
+        return muscle;
+    }
+
+    public void setMuscle(String muscle) {
+        this.muscle = muscle;
+    }
+
+    private Integer rir;
     private String name;
     private Integer sets;
     private String reps;

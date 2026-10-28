@@ -4,7 +4,7 @@ import jakarta.validation.constraints.*;
 
 public class PlanRequest {
     @NotNull(message = "Please enter your age")
-    @Min(value = 16, message = "Age must be at least 16")
+    @Min(value = 18, message = "Age must be at least 18")
     @Max(value = 80, message = "Age must be at most 80")
     private Integer age;
 
@@ -27,7 +27,7 @@ public class PlanRequest {
     private String experience;
 
     @NotBlank(message = "Please choose a goal")
-    @Pattern(regexp = "muscle_gain|strength|fat_loss|general_fitness", message = "Please choose a valid goal")
+    @Pattern(regexp = "cut|aggressive_cut|lean_bulk|bulk|strength|general_fitness", message = "Please choose a valid goal")
     private String goal;
 
     @NotBlank(message = "Please choose your equipment")
@@ -55,8 +55,20 @@ public class PlanRequest {
     private String focusMuscles;
 
     @NotBlank(message = "Please choose a language")
-    @Pattern(regexp = "en|de", message = "Please choose a valid language")
+    @Pattern(regexp = "en|de|uk", message = "Please choose a valid language")
     private String language;
+
+    @Min(value = 5, message = "Body fat must be between 5 and 60 percent")
+    @Max(value = 60, message = "Body fat must be between 5 and 60 percent")
+    private Integer bodyFatPercent;
+
+    public Integer getBodyFatPercent() {
+        return bodyFatPercent;
+    }
+
+    public void setBodyFatPercent(Integer bodyFatPercent) {
+        this.bodyFatPercent = bodyFatPercent;
+    }
 
     public Integer getAge() {
         return age;

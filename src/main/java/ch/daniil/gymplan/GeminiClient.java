@@ -105,10 +105,14 @@ public class GeminiClient {
                 "type", "object",
                 "properties", Map.of(
                         "name", Map.of("type", "string"),
+                        "muscle", Map.of("type", "string", "enum", List.of(
+                                "chest", "back", "shoulders", "biceps", "triceps",
+                                "quads", "hamstrings", "glutes", "calves", "core")),
                         "sets", Map.of("type", "integer"),
                         "reps", Map.of("type", "string"),
+                        "rir", Map.of("type", "integer"),
                         "restSeconds", Map.of("type", "integer")),
-                "required", List.of("name", "sets", "reps", "restSeconds"));
+                "required", List.of("name", "muscle", "sets", "reps", "rir", "restSeconds"));
 
         Map<String, Object> day = Map.of(
                 "type", "object",
@@ -122,7 +126,9 @@ public class GeminiClient {
                 "type", "object",
                 "properties", Map.of(
                         "summary", Map.of("type", "string"),
+                        "progression", Map.of("type", "string"),
+                        "deload", Map.of("type", "string"),
                         "days", Map.of("type", "array", "items", day)),
-                "required", List.of("summary", "days"));
+                "required", List.of("summary", "progression", "deload", "days"));
     }
 }

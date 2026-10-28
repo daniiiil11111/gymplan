@@ -3,6 +3,25 @@ package ch.daniil.gymplan;
 import java.util.ArrayList;
 
 public class Plan {
+    private String progression;
+    private String deload;
+
+    public String getProgression() {
+        return progression;
+    }
+
+    public void setProgression(String progression) {
+        this.progression = progression;
+    }
+
+    public String getDeload() {
+        return deload;
+    }
+
+    public void setDeload(String deload) {
+        this.deload = deload;
+    }
+
     private String summary;
     private ArrayList<Day> days = new ArrayList<>();
 

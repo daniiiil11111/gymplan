@@ -3,9 +3,12 @@ package ch.daniil.gymplan;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
+import java.util.Set;
 
 @Component
 public class PlanChecker {
+    private static final Set<String> MUSCLES = Set.of("chest", "back", "shoulders", "biceps",
+            "triceps", "quads", "hamstrings", "glutes", "calves", "core");
     public ArrayList<String> check(Plan plan, int expectedDays){
         ArrayList<String> problems = new ArrayList<>();
 
@@ -14,7 +17,7 @@ public class PlanChecker {
             return problems;
         }
         if (plan.getDays().size() != expectedDays){
-            problems.add("Expected " + expectedDays + " songs but got " + plan.getDays().size());
+            problems.add("Expected " + expectedDays + " days but got " + plan.getDays().size());
         }
         for (int i = 0; i < plan.getDays().size(); i++){
             Day day = plan.getDays().get(i);
@@ -25,6 +28,18 @@ public class PlanChecker {
             for (int k = 0; k < day.getExercises().size(); k++){
                 Exercise exercise = day.getExercises().get(k);
                 int number2 = k + 1;
+                if (MUSCLES == null){
+                    problems.add("Exercise " + number + " not found");
+                }
+                if (!(MUSCLES.contains(exercise.getMuscle()))){
+                    problems.add("Muscle " + number + " not found");
+                }
+                if (exercise.getRir() == null){
+                    problems.add("Rir " + number + " not found");
+                }
+                if (exercise.getRir() >5 || exercise.getRir() <0){
+                    problems.add("Rir " + number + " not found");
+                }
                 if (exercise == null){
                     problems.add("Day " + number + ", exercise " + number2 + " not found");
                 }

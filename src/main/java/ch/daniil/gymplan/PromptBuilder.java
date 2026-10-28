@@ -6,8 +6,12 @@ import org.springframework.stereotype.Component;
 public class PromptBuilder {
 
     public String build(PlanRequest r) {
-        String language = "de".equals(r.getLanguage()) ? "German" : "English";
-
+        String language = "German";
+        if ("en".equals(r.getLanguage())) {
+            language = "English";
+        } else if ("uk".equals(r.getLanguage())){
+            language = "Ukrainian";
+        }
         StringBuilder sb = new StringBuilder();
         sb.append("Create a weekly gym training plan as JSON.\n\n");
         sb.append("Requirements:\n");
@@ -21,10 +25,15 @@ public class PromptBuilder {
         sb.append("- Person: ").append(r.getSex()).append(", ").append(r.getAge())
                 .append(" years old, ").append(r.getHeightCm()).append(" cm, ")
                 .append(r.getWeightKg()).append(" kg.\n");
-        sb.append("- Write all text values (summary, day labels, focus, exercise names) in ")
-                .append(language).append(". Keep the JSON keys in English.\n");
-        sb.append("- For each exercise give sets as a whole number, reps as text (for example \"8-10\"), ")
-                .append("and restSeconds as a whole number of seconds.\n");
+        sb.append("- Write all text values (summary, day labels, focus, exercise names, reps, progression, deload) in ")
+                .append(language).append(". Keep the JSON keys and the muscle values in English.\n");
+        sb.append("- For each exercise give: muscle (the primary muscle, one of the allowed values), sets (whole number), ")
+                .append("reps as text (for example \"8-10\"), rir (reps in reserve, a whole number from 0 to 4) ")
+                .append("and restSeconds (whole seconds).\n");
+        sb.append("- Use rir 1 to 3 on most sets and 0 only on the last set of isolation exercises. Put compound lifts first.\n");
+        sb.append("- Aim for roughly 10 to 20 hard sets per muscle group per week where the session time allows.\n");
+        sb.append("- progression: 2 to 3 sentences on how to progress from week to week. ")
+                .append("deload: 1 to 2 sentences on when and how to deload.\n");
         sb.append("- This is general training information only. No diet advice, no supplements, ")
                 .append("no medical claims.\n");
 
@@ -58,9 +67,11 @@ public class PromptBuilder {
 
     private String goalText(String goal) {
         return switch (goal) {
-            case "muscle_gain" -> "build muscle";
-            case "strength" -> "get stronger";
-            case "fat_loss" -> "lose fat";
+            case "cut" -> "a cutting phase (calorie deficit): preserve muscle and strength, keep volume moderate";
+            case "aggressive_cut" -> "a short aggressive cut: keep intensity high, reduce total volume to protect recovery";
+            case "lean_bulk" -> "a lean bulk: progressive overload with controlled volume";
+            case "bulk" -> "a bulk: higher training volume with progressive overload";
+            case "strength" -> "maximal strength: heavy compound lifts with low reps and long rests";
             default -> "general fitness";
         };
     }

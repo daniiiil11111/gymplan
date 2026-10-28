@@ -1,71 +1,106 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html th:lang="${planRequest.language}" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Your Workout Plan</title>
-    <link rel="stylesheet" th:href="@{/css/style.css}" href="/css/style.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title th:text="#{result.title}">Your training plan</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
 </head>
 <body>
-
 <div class="wrap">
-    <h1>Your Personal Plan</h1>
-    <p class="lead" th:text="${plan.summary}">Workout plan summary</p>
 
-    <!-- Input Summary Chips -->
-    <ul class="chips">
-        <li>Goal: <strong th:text="${planRequest.goal}">Goal</strong></li>
-        <li>Frequency: <strong th:text="${planRequest.daysPerWeek} + ' days/week'">3 days/week</strong></li>
-        <li>Session Length: <strong th:text="${planRequest.minutesPerSession} + ' mins'">60 mins</strong></li>
-    </ul>
+    <main id="plan-content">
+        <h1 th:text="#{result.title}">Your training plan</h1>
+        <p class="lead" th:text="${plan.summary}"></p>
 
-    <!-- Workout Days List -->
-    <div class="days">
-        <div class="day" th:each="day, iterStat : ${plan.days}" th:style="|--i: ${iterStat.index};|">
+        <ul class="chips">
+            <li th:text="#{|goal.${planRequest.goal}|}"></li>
+            <li th:text="#{|equipment.${planRequest.equipment}|}"></li>
+            <li th:text="#{result.chip.days(${planRequest.daysPerWeek})}"></li>
+            <li th:text="#{result.chip.minutes(${planRequest.minutesPerSession})}"></li>
+        </ul>
 
-            <div class="day-header">
-                <div>
-                    <h2 th:text="${day.label}">Day Name</h2>
-                    <p class="focus" th:text="${day.focus}">Target focus area</p>
+        <div class="days">
+            <article class="day" th:each="day, stat : ${plan.days}" th:style="|--i: ${stat.index}|">
+                <h2 th:text="${day.label}"></h2>
+                <p class="focus" th:text="${day.focus}"></p>
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                        <tr>
+                            <th th:text="#{col.exercise}"></th>
+                            <th th:text="#{col.muscle}"></th>
+                            <th th:text="#{col.sets}"></th>
+                            <th th:text="#{col.reps}"></th>
+                            <th th:text="#{col.rir}" th:title="#{col.rir.hint}"></th>
+                            <th th:text="#{col.rest}"></th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr th:each="exercise : ${day.exercises}">
+                            <td th:text="${exercise.name}"></td>
+                            <td th:text="#{|muscle.${exercise.muscle}|}"></td>
+                            <td th:text="${exercise.sets}"></td>
+                            <td th:text="${exercise.reps}"></td>
+                            <td th:text="${exercise.rir}"></td>
+                            <td th:text="#{unit.seconds(${exercise.restSeconds})}"></td>
+                        </tr>
+                        </tbody>
+                    </table>
                 </div>
-            </div>
+            </article>
 
-            <div class="table-wrap">
-                <table>
-                    <thead>
-                    <tr>
-                        <th>Exercise</th>
-                        <th>Sets</th>
-                        <th>Reps</th>
-                        <th>Rest</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <tr th:each="exercise : ${day.exercises}">
-                        <td th:text="${exercise.name}">Exercise Name</td>
-                        <td th:text="${exercise.sets}">3</td>
-                        <td th:text="${exercise.reps}">10-12</td>
-                        <td th:text="|${exercise.restSeconds}s|">60s</td>
-                    </tr>
-                    </tbody>
-                </table>
-            </div>
+            <section class="day" th:if="${volume != null and !volume.isEmpty()}">
+                <h2 th:text="#{volume.title}"></h2>
+                <ul class="chips">
+                    <li th:each="entry : ${volume}"
+                        th:classappend="${entry.value lt 10 or entry.value gt 20} ? 'flag'">
+                        <span th:text="#{|muscle.${entry.key}|}"></span>
+                        <span th:text="${entry.value}"></span>
+                    </li>
+                </ul>
+                <p class="note" th:text="#{volume.hint}"></p>
+            </section>
 
+            <section class="day" th:if="${plan.progression != null}">
+                <h2 th:text="#{progression.title}"></h2>
+                <p th:text="${plan.progression}"></p>
+                <h2 th:text="#{deload.title}"></h2>
+                <p th:text="${plan.deload}"></p>
+            </section>
+
+            <section class="day nutrition" th:if="${nutrition != null}">
+                <h2 th:text="#{nutrition.title}"></h2>
+                <p class="focus" th:text="#{nutrition.calories(${nutrition.targetCalories})}"></p>
+                <p class="focus" th:text="#{nutrition.maintenance(${nutrition.maintenanceCalories})}"></p>
+                <ul class="chips">
+                    <li><span th:text="#{nutrition.protein}"></span>
+                        <span th:text="#{nutrition.grams(${nutrition.proteinGrams})}"></span></li>
+                    <li><span th:text="#{nutrition.carbs}"></span>
+                        <span th:text="#{nutrition.grams(${nutrition.carbGrams})}"></span></li>
+                    <li><span th:text="#{nutrition.fat}"></span>
+                        <span th:text="#{nutrition.grams(${nutrition.fatGrams})}"></span></li>
+                </ul>
+                <p th:if="${nutrition.weeklyChangeKg lt -0.05}"
+                   th:text="#{nutrition.rate.loss(${#numbers.formatDecimal(nutrition.weeklyChangeAbsKg, 1, 1)})}"></p>
+                <p th:if="${nutrition.weeklyChangeKg gt 0.05}"
+                   th:text="#{nutrition.rate.gain(${#numbers.formatDecimal(nutrition.weeklyChangeAbsKg, 1, 1)})}"></p>
+                <p class="note" th:if="${!nutrition.note.isEmpty()}" th:text="${nutrition.note}"></p>
+                <p class="note" th:text="#{nutrition.disclaimer}"></p>
+            </section>
         </div>
-    </div>
+    </main>
 
-    <!-- Raw Gemini Output (Optional Debug Section) -->
-    <div class="note" th:if="${rawPlan != null}">
-        <h2>Raw Gemini answer (lesson 5 test)</h2>
-        <pre th:text="${rawPlan}" style="white-space: pre-wrap; background: var(--surface); padding: 16px; border-radius: 8px; border: 1px solid var(--line);"></pre>
-    </div>
-
-    <!-- Action Button -->
-    <div class="actions">
-        <a th:href="@{/plan}" class="btn secondary">&larr; Create another plan</a>
+    <div class="actions no-print">
+        <button type="button" class="btn secondary" id="copy-btn"
+                th:text="#{button.copy}"
+                th:data-copied="#{button.copied}"
+                th:data-failed="#{button.copyfailed}">Copy as text</button>
+        <button type="button" class="btn secondary" id="print-btn" th:text="#{button.print}">Print / save as PDF</button>
+        <a class="btn secondary" th:href="@{/plan}" th:text="#{button.new}">New plan</a>
     </div>
 
 </div>
-
+<script th:src="@{/js/app.js}" defer></script>
 </body>
 </html>

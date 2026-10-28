@@ -422,3 +422,37 @@ td:first-child, th:first-child {
         transition: none !important;
     }
 }
+@media print {
+    body { background: #fff; }
+    .no-print { display: none !important; }
+    .wrap { max-width: none; padding: 0; }
+    .day { break-inside: avoid; animation: none; }
+}
+.chips li.flag { background: #fff1dc; color: #8a4b00; }
+/* ---- spacing fix: one consistent rhythm inside every card ---- */
+.day {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+.day > * { margin: 0; }
+.day h2 + .focus { margin-top: -6px; }          /* subtitle sits closer to its heading */
+.day h2:not(:first-child) { margin-top: 12px; } /* a second heading in a card (Deload) gets more air */
+.day .table-wrap { margin-top: 4px; }
+.chips { gap: 10px; }
+
+/* ---- button row ---- */
+.actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    align-items: stretch;
+    margin-top: 32px;
+}
+.actions .btn {
+    margin: 0;
+    width: auto;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}

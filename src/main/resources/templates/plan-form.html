@@ -6,6 +6,7 @@
   <title>Create your gym plan</title>
   <link rel="stylesheet" th:href="@{/css/style.css}" href="/css/style.css">
 </head>
+<script th:src="@{/js/app.js}" defer></script>
 <body>
 
 <div class="wrap">
@@ -13,7 +14,7 @@
   <p class="lead">Fill in your details to get a personalized workout routine.</p>
 
   <div class="card">
-    <form th:action="@{/plan}" th:object="${planRequest}" method="post">
+    <form id="plan-form" th:action="@{/plan}" th:object="${planRequest}" method="post">
 
       <!-- Global Error Alert -->
       <div class="alert" th:if="${#fields.hasGlobalErrors()}">
@@ -69,9 +70,11 @@
         <div class="field">
           <label for="goal">Goal</label>
           <select id="goal" th:field="*{goal}">
-            <option value="muscle_gain">Build muscle</option>
+            <option value="cut">Cut</option>
+            <option value="aggressive_cut">Aggressive cut</option>
+            <option value="lean_bulk">Lean bulk</option>
+            <option value="bulk">Bulk</option>
             <option value="strength">Get stronger</option>
-            <option value="fat_loss">Lose fat</option>
             <option value="general_fitness">General fitness</option>
           </select>
           <span class="error" th:if="${#fields.hasErrors('goal')}" th:errors="*{goal}">error</span>
@@ -127,20 +130,25 @@
           <input type="text" id="focusMuscles" th:field="*{focusMuscles}" placeholder="e.g. back, shoulders">
           <span class="error" th:if="${#fields.hasErrors('focusMuscles')}" th:errors="*{focusMuscles}">error</span>
         </div>
-
+        <p><label>Body fat % (optional)
+          <input type="number" th:field="*{bodyFatPercent}" placeholder="e.g. 15"></label>
+          <span class="error" th:if="${#fields.hasErrors('bodyFatPercent')}" th:errors="*{bodyFatPercent}">error</span>
+        </p>
         <!-- Language -->
         <div class="field wide">
           <label for="language">Plan language</label>
           <select id="language" th:field="*{language}">
             <option value="en">English</option>
             <option value="de">German</option>
+            <option value="uk">Ukrainian</option>
           </select>
           <span class="error" th:if="${#fields.hasErrors('language')}" th:errors="*{language}">error</span>
         </div>
 
       </div>
 
-      <button type="submit" class="btn">Create plan</button>
+
+      <button id="submit-btn" type="submit" class="btn">Create plan</button>
     </form>
   </div>
 </div>

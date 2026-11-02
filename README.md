@@ -70,7 +70,7 @@ src/main/resources
 
 ### 1. Clone
 ```bash
-git clone https://github.com/<your-username>/gymplan.git
+git clone https://github.com/daniiiil11111/gymplan.git
 cd gymplan
 ```
 
